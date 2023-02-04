@@ -119,3 +119,78 @@
 ## 사용 사례 고려
 
 - 스키마를 설계할 때 애플리케이션의 특정 사용 사례와 요구 사항을 고려하고 필요에 맞는 모델링 방법을 선택하기.
+
+### populate
+
+> Mongoose의 `populate` 기능은 Mongoose model에서 관계형 데이터를 쉽게 관리할 수 있도록 하는(다른 문서(document)의 레퍼런스를 가져오는) 기능이다.
+>
+> - MongoDB에서는 다른 문서의 정보를 저장할 때 다른 문서의 \_id 값을 참조하는 방식을 사용한다.
+> - 예를 들어, User 모델과 Post 모델이 있을 때, User 모델에는 Posts 필드가 있어 해당 User가 쓴 Post들을 참조할 수 있다.
+> - 그러나, User 모델에서는 Posts 필드에 해당하는 Post 데이터의 상세 정보(예: Title, Body)를 얻을 수 없다.
+> - 이 때, Mongoose의 `populate` 기능을 사용하면 User 모델에서 Posts 필드를 참조할 때, 해당 Posts의 상세 정보(Title, Body)를 같이 조회(다른 문서에서의 정보를 가져와 현재 문서에서 사용)할 수 있다.
+> - 즉, User 모델과 Post 모델 간의 관계형 데이터를 쉽게 관리할 수 있게 됩니다.
+
+```javascript
+const mongoose = require("mongoose");
+
+const UserSchema = new mongoose.Schema({
+  name: String,
+  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
+});
+
+const PostSchema = new mongoose.Schema({
+  title: String,
+  body: String,
+  author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+});
+
+const User = mongoose.model("User", UserSchema);
+const Post = mongoose.model("Post", PostSchema);
+
+// Find a user and populate their posts
+User.findOne({ name: "John Doe" })
+  .populate("posts")
+  .exec((err, user) => {
+    console.log(user);
+  });
+```
+
+- 위 예시에서, User 모델과 Post 모델을 정의하고 User 모델에서 name이 'John Doe'인 User를 조회하는 코드를 보면,
+- `User.findOne().populate('posts').exec()` 메서드를 통해 User를 조회할 때, Posts 필드에 해당하는 Post 데이터의 상세 정보(Title, Body)를 같이 조회할 수 있다.
+
+> exec는 Mongoose의 Query 객체에서 사용되는 메서드이다. <br>
+> exec 메서드는 MongoDB에서 데이터를 가져오고, 결과를 제공하는 비동기 함수를 실행하는 역할을 한다. <br>
+> 위의 코드에서는 `User.findOne({ name: 'John Doe' }).populate('posts')`의 쿼리 결과를 비동기적으로 제공하는 exec 메서드를 사용하여, name이 'John Doe'인 User 객체를 가져오고 있다. <br>
+> exec 메서드에서 사용되는 콜백 함수에서는 두 개의 인자가 제공 된다. <br>
+>
+> - 첫 번째 인자는 오류(error) 객체이고,
+> - 두 번째 인자는 결과(result) 객체입니다. <br>
+>   위의 코드에서는 결과 객체를 user라는 변수에 할당하고 있다.
+
+> Query object는 MongoDB에서 데이터베이스에서 데이터를 조회, 수정, 삭제하는 데 사용되는 추상 객체다. <br>
+> MongoDB의 모델 객체(Mongoose의 Model)로부터 생성된 쿼리 객체는 MongoDB 데이터베이스에 쿼리를 날릴 수 있도록 해준다. <br>
+> 쿼리 객체는 많은 쿼리 메소드(ex: find, findOne, update, remove)를 포함하며, <br>
+> 이 메소드를 사용하여 검색 조건, 업데이트, 삭제 등을 수행할 수 있다. exec 메소드는 쿼리 객체에서 쿼리를 실행하도록 지시하는 메소드다.
+
+- 즉, User와 Post 간의 관계형 데이터를 쉽게 관리할 수 있게 된다.
+- 위의 코드에서 console.log(user);의 값은 name이 'John Doe'인 User의 상세 정보를 포함한 객체이다.
+- 만약 해당 User가 posts 필드에 연결된 Post 데이터가 있다면, posts 필드에 해당하는 Post 데이터의 상세 정보(Title, Body)도 같이 포함된다.
+- 아래와 같은 결과
+
+```javascript
+{
+  _id: 5f4f4c01aef37b38f861f492,
+  name: 'John Doe',
+  posts: [
+    {
+      _id: 5f4f4c01aef37b38f861f493,
+      title: 'Hello World',
+      body: 'This is a sample post',
+      author: 5f4f4c01aef37b38f861f492,
+      __v: 0
+    },
+    ...
+  ],
+  __v: 0
+}
+```
