@@ -122,13 +122,12 @@
 
 ### populate
 
-> Mongoose의 `populate` 기능은 Mongoose model에서 관계형 데이터를 쉽게 관리할 수 있도록 하는(다른 문서(document)의 레퍼런스를 가져오는) 기능이다.
->
-> - MongoDB에서는 다른 문서의 정보를 저장할 때 다른 문서의 \_id 값을 참조하는 방식을 사용한다.
-> - 예를 들어, User 모델과 Post 모델이 있을 때, User 모델에는 Posts 필드가 있어 해당 User가 쓴 Post들을 참조할 수 있다.
-> - 그러나, User 모델에서는 Posts 필드에 해당하는 Post 데이터의 상세 정보(예: Title, Body)를 얻을 수 없다.
-> - 이 때, Mongoose의 `populate` 기능을 사용하면 User 모델에서 Posts 필드를 참조할 때, 해당 Posts의 상세 정보(Title, Body)를 같이 조회(다른 문서에서의 정보를 가져와 현재 문서에서 사용)할 수 있다.
-> - 즉, User 모델과 Post 모델 간의 관계형 데이터를 쉽게 관리할 수 있게 됩니다.
+- Mongoose의 `populate` 기능은 Mongoose model에서 관계형 데이터를 쉽게 관리할 수 있도록 하는(다른 문서(document)의 레퍼런스를 가져오는) 기능이다.
+  - MongoDB에서는 다른 문서의 정보를 저장할 때 다른 문서의 \_id 값을 참조하는 방식을 사용한다.
+  - 예를 들어, User 모델과 Post 모델이 있을 때, User 모델에는 Posts 필드가 있어 해당 User가 쓴 Post들을 참조할 수 있다.
+  - 그러나, User 모델에서는 Posts 필드에 해당하는 Post 데이터의 상세 정보(예: Title, Body)를 얻을 수 없다.
+  - 이 때, Mongoose의 `populate` 기능을 사용하면 User 모델에서 Posts 필드를 참조할 때, 해당 Posts의 상세 정보(Title, Body)를 같이 조회(다른 문서에서의 정보를 가져와 현재 문서에서 사용)할 수 있다.
+  - 즉, User 모델과 Post 모델 간의 관계형 데이터를 쉽게 관리할 수 있게 된다.
 
 ```javascript
 const mongoose = require("mongoose");
