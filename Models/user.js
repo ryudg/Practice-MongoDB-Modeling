@@ -57,5 +57,5 @@ const addAdress = async (id) => {
   console.log(res);
 };
 
-// makeUser();
-addAdress("63de46fd13cdf0df1499bfab");
+// makeUser(); 유저 추가
+addAdress("63de46fd13cdf0df1499bfab"); // id를 찾은 후 새 주소 추가
