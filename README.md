@@ -134,7 +134,9 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
   name: String,
-  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
+  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }], // products 필드가 MongoDB ObjectId의 배열이어야 함을 지정
+  // type 속성은 Schema.Types.ObjectId로 설정되어 Mongoose에게이 필드가 MongoDB 문서의 고유 식별자를 저장할 것임을 알림.
+  // ref 속성은 "Product"로 설정되어 ObjectId 값을 결정할 때 Mongoose가 Product 컬렉션을 참조하도록 지정
 });
 
 const PostSchema = new mongoose.Schema({

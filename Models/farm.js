@@ -47,11 +47,57 @@ const Product = mongoose.model("Product", productSchema);
 // };
 // makeFarm();
 
-const addProduct = async () => {
-  const farm = await Farm.findOne({ name: "Full Belly Farms" });
-  const watermelo = await Product.findOne({ name: "Sugar Watermelo" });
-  farm.products.push(watermelo);
-  await farm.save();
-  console.log(farm);
-};
-addProduct();
+// const addProduct = async () => {
+//   const farm = await Farm.findOne({ name: "Full Belly Farms" });
+//   const watermelo = await Product.findOne({ name: "Sugar Watermelo" });
+//   farm.products.push(watermelo);
+//   await farm.save();
+//   console.log(farm);
+// };
+// addProduct();
+
+// Farm.findOne({ name: "Full Belly Farms" }).then((farm) => console.log(farm));
+// {
+//   _id: new ObjectId("63de876ee7576d53a213a9ad"),
+//   name: 'Full Belly Farms',
+//   city: 'Guinda, CA',
+//   products: [
+//     new ObjectId("63de79e6de4f816f0f9bfc17"),
+//     new ObjectId("63de79e6de4f816f0f9bfc18"),
+//     new ObjectId("63de79e6de4f816f0f9bfc18")
+//   ],
+//   __v: 2
+// }
+
+Farm.findOne({ name: "Full Belly Farms" })
+  .populate("products") // 각 상품에 대한 모든 정보
+  .then((farm) => console.log(farm));
+// {
+//   _id: new ObjectId("63de876ee7576d53a213a9ad"),
+//   name: 'Full Belly Farms',
+//   city: 'Guinda, CA',
+//   products: [
+//     {
+//       _id: new ObjectId("63de79e6de4f816f0f9bfc17"),
+//       name: 'Goddes Melon',
+//       price: 4.99,
+//       season: 'Summer',
+//       __v: 0
+//     },
+//     {
+//       _id: new ObjectId("63de79e6de4f816f0f9bfc18"),
+//       name: 'Sugar Watermelo',
+//       price: 5.99,
+//       season: 'Summer',
+//       __v: 0
+//     },
+//     {
+//       _id: new ObjectId("63de79e6de4f816f0f9bfc18"),
+//       name: 'Sugar Watermelo',
+//       price: 5.99,
+//       season: 'Summer',
+//       __v: 0
+//     }
+//   ],
+//   __v: 2
+// }
